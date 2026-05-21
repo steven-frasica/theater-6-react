@@ -3,10 +3,10 @@ import './Navbar.css'
 
 const Navbar = () => {
   return (
-    <div className="hero">
+    <div className="nav">
       <h1>Theater 6</h1>
       <h2>Search for your next viewing experience</h2>
-      <div className="hero__controls">
+      <div className="nav__controls">
         <div className="search-bar">
           <input id="search-input" type="text" placeholder="Type to Search"/>
           <button className="search-bar__clear">&times;</button>
