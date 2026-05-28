@@ -12,7 +12,7 @@ const Navbar = () => {
           <button className="search-bar__clear">&times;</button>
         </div>
         <select name="sort" id="sort-select" className="sort-select">
-          <option value="" disabled selected>Sort</option>
+          <option value="" disabled defaultValue>Sort</option>
           <option value="NEW_TO_OLD">Newest First</option>
           <option value="OLD_TO_NEW">Oldest First</option>
           <option value="RATING_HIGH_TO_LOW">Rating, High to Low</option>
