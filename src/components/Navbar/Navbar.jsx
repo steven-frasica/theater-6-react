@@ -4,7 +4,7 @@ import './Navbar.css'
 const Navbar = () => {
   return (
     <div className="nav">
-      <h1>Theater 6</h1>
+      <h1>Theater6</h1>
       <h2>Search for your next viewing experience</h2>
       <div className="nav__controls">
         <div className="search-bar">
