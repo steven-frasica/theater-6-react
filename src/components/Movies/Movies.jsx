@@ -24,8 +24,8 @@ const Movies = () => {
       <Navbar />
       <section id="movie-grid">
         {movies.map((movie) => (
-          <div className="movie-card">
-            <div className="movie-card-media">
+          <div key={movie.imdbID} className="movie-card">
+            <div className="movie-card__media">
               <figure>
                 <img src={movie.Poster} alt="" />
               </figure>

@@ -1,11 +1,12 @@
 #movie-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   justify-content: center;
   padding-right: var(--gutter);
   padding-left: var(--gutter);
   padding-top: 2em;
   padding-bottom: calc(var(--section-gap) - 6px);
+  gap: 4px;
 }
 
 .movie-grid-message-container {
@@ -14,8 +15,7 @@
   border: 1px solid #7ee8ff47;
   border-radius: 16px;
   grid-column: -1/ 1;
-  background: linear-gradient(160deg, #0a1a30b8,
-    #142b4694);
+  background: linear-gradient(160deg, #0a1a30b8, #142b4694);
   box-shadow: 0 10px 26px rgba(0, 6, 18, 0.35);
 }
 
@@ -49,4 +49,67 @@
   border-radius: 999px;
   background: rgba(126, 232, 255, 0.3);
   box-shadow: 0 0 0 1px rgba(6, 18, 36, 0.35) inset;
+}
+
+/* Relative positioning creates the containing block for the info overlay. */
+/* Because the info panel is absolutely positioned, it anchors to this card. */
+.movie-card {
+  position: relative;
+  align-self: start;
+  /* overflow: hidden; */
+  border-radius: 12px;
+  padding: 4px;
+}
+
+figure,
+.movie-card__media {
+  margin: 0;
+  border-radius: 12px;
+}
+
+.movie-card__media {
+  aspect-ratio: 2/3;
+  min-height: 0;
+  width: 100%;
+  display: grid;
+  cursor: pointer;
+  place-items: center;
+  border-radius: 12px;
+}
+
+img {
+  border-radius: 12px;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.movie-card:hover img {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.movie-card:hover .movie-card__details {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.movie-card__details {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 16px;
+  max-height: calc(100% - 32px);
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0px 11px 0px 11px;
+  border-radius: 10px;
+  color: #f4f8ff;
+  border: 1px solid #7ee8ff47;
+  background: linear-gradient(180deg, #0a1a30f2, #142b46eb);
+  transform: translateY(10px);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  cursor: pointer;
 }
