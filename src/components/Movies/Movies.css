@@ -65,6 +65,7 @@ figure,
 .movie-card__media {
   margin: 0;
   border-radius: 12px;
+  overflow: hidden;
 }
 
 .movie-card__media {
@@ -80,18 +81,17 @@ figure,
 img {
   border-radius: 12px;
   width: 100%;
-  object-fit: cover;
-  transition: transform 0.2s ease;
+  height: 100%;
+  transition: transform 0.25s ease;
 }
 
 .movie-card:hover img {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-2px) scale(1.03);
 }
 
 .movie-card:hover .movie-card__details {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: auto;
 }
 
 .movie-card__details {
@@ -110,6 +110,8 @@ img {
   background: linear-gradient(180deg, #0a1a30f2, #142b46eb);
   transform: translateY(10px);
   opacity: 0;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
   cursor: pointer;
 }
