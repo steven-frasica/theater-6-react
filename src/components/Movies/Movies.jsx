@@ -8,6 +8,7 @@ const Movies = () => {
   // searchTerm in input
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const fallbackPoster = "/fallback-poster.png"
 
   function onSearchChange(event) {
@@ -50,7 +51,7 @@ const Movies = () => {
       />
       <section id="movie-grid">
         {movies.map((movie) => (
-          <div key={movie.imdbID} className="movie-card">
+          <div key={movie.imdbID} className="movie-card" onClick={() => console.log("Modal")}>
             <div className="movie-card__media">
               <figure>
                 <img 
