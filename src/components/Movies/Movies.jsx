@@ -5,23 +5,43 @@ import Navbar from "../Navbar/Navbar";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
+  // searchTerm in input
+  const [searchTerm, setSearchTerm] = useState("");
 
-  async function getMovies() {
-    const { data } = await axios.get(
-      `http://www.omdbapi.com/?s=fast&apikey=92fb2c25`,
-    );
-    setMovies(data.Search.slice(0, 6));
+  // async function getMovies() {
+  //   const { data } = await axios.get(
+  //     `http://www.omdbapi.com/?s=fast&apikey=92fb2c25`,
+  //   );
+  //   setMovies(data.Search.slice(0, 6));
+  // }
+
+  // useEffect(() => {
+  //   onSearchChange();
+  // }, [movies]);
+
+  function onSearchChange(event) {
+    console.log(event.target.value);
+    setSearchTerm(event.target.value);
+    console.log("searchTerm", searchTerm);
   }
 
-  useEffect(() => {
-    getMovies();
-  }, []);
-
-  console.log(movies);
+  const clearSearch = () => {
+    console.log('clearSearch')
+    setSearchTerm("")
+  };
+  // async function onSearchChange(event){
+  //   const query = event.target.value;
+  //   const { data } = await axios.get(
+  //     `http://www.omdbapi.com/?s=${query}&apikey=92fb2c25`,
+  //   );
+  //   setMovies(data.Search.slice(0, 6));
+  //   console.log(movies);
+  //   // console.log(event.target.value.trim())
+  // }
 
   return (
     <>
-      <Navbar />
+      <Navbar onSearchChange={onSearchChange} searchTerm={searchTerm} clearSearch={clearSearch}/>
       <section id="movie-grid">
         {movies.map((movie) => (
           <div key={movie.imdbID} className="movie-card">
