@@ -8,7 +8,7 @@ const Movies = () => {
   // searchTerm in input
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
+  const [modal, setModal] = useState(false);
   const fallbackPoster = "/fallback-poster.png"
 
   function onSearchChange(event) {
@@ -42,6 +42,13 @@ const Movies = () => {
     setSearchTerm("");
   };
 
+  const openModal = () => {
+    setModal(true);
+    console.log(modal, 'modal')
+  }
+
+
+
   return (
     <>
       <Navbar
@@ -51,7 +58,7 @@ const Movies = () => {
       />
       <section id="movie-grid">
         {movies.map((movie) => (
-          <div key={movie.imdbID} className="movie-card" onClick={() => console.log("Modal")}>
+          <div key={movie.imdbID} className="movie-card" onClick={openModal}>
             <div className="movie-card__media">
               <figure>
                 <img 
@@ -97,6 +104,7 @@ const Movies = () => {
           </div>
         ) : null}
       </section>
+      {modal ? <div>hello this will be the modal</div> : <div>Not showing the modal</div>}
     </>
   );
 };
