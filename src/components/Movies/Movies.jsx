@@ -4,11 +4,13 @@ import axios from "axios";
 import Navbar from "../Navbar/Navbar";
 import MovieCard from "./MovieCard";
 import Modal from "../Modal/Modal";
+import { useSearchParams } from "react-router-dom";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   // searchTerm in input
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
   const latestSearchId = useRef(0);
@@ -24,6 +26,23 @@ const Movies = () => {
       setSortValue("");
     }
   }
+
+  useEffect(() => {
+    const trimmedSearch = searchTerm.trim();
+    const currentSearchParam = searchParams.get("search") || "";
+  
+
+    if (!trimmedSearch) {
+      if (currentSearchParam) {
+        setSearchParams({})
+      }
+      return;
+    }
+
+    if (trimmedSearch !== currentSearchParam) {
+      setSearchParams({ search: trimmedSearch})
+    }
+  }, [searchTerm, searchParams, setSearchParams])
 
   useEffect(() => {
     const trimmedQuery = searchTerm.trim();
