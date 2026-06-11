@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Movies.css";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
+import MovieCard from "./MovieCard";
+import Modal from "../Modal/Modal";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -9,14 +11,25 @@ const Movies = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modal, setModal] = useState(false);
-  const fallbackPoster = "/fallback-poster.png"
+  const latestSearchId = useRef(0);
+  const fallbackPoster = "/fallback-poster.png";
+  const [sortValue, setSortValue] = useState("");
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   function onSearchChange(event) {
-    setSearchTerm(event.target.value);
+    const nextValue = event.target.value;
+    setSearchTerm(nextValue);
+
+    if (!nextValue.trim()) {
+      setSortValue("");
+    }
   }
 
   useEffect(() => {
-    if (!searchTerm.trim()) {
+    const trimmedQuery = searchTerm.trim();
+    const searchId = ++latestSearchId.current;
+
+    if (!trimmedQuery) {
       setMovies([]);
       setIsLoading(false);
       return;
@@ -25,29 +38,109 @@ const Movies = () => {
     setIsLoading(true);
 
     const timeoutId = setTimeout(async () => {
-      const { data } = await axios.get(
-        `http://www.omdbapi.com/?s=${searchTerm}&apikey=92fb2c25`,
-      );
-      setMovies(data.Search ? data.Search.slice(0, 6) : []);
-      console.log(data.Search);
-      console.log(searchTerm);
-      setIsLoading(false);
+      try {
+        const { data } = await axios.get(
+          `http://www.omdbapi.com/?s=${trimmedQuery}&apikey=92fb2c25`,
+        );
+
+        if (searchId !== latestSearchId.current) return;
+
+        const searchResults = data.Search ? data.Search.slice(0, 6) : [];
+
+        const detailedMovies = await Promise.all(
+          searchResults.map(async (movie) => {
+            try {
+              const { data } = await axios.get(
+                `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=92fb2c25`,
+              );
+              return data.Response === "False" ? movie : data;
+            } catch (error) {
+              return movie;
+            }
+          }),
+        );
+
+        if (searchId !== latestSearchId.current) return;
+
+        setMovies(detailedMovies);
+      } catch (error) {
+        if (searchId !== latestSearchId.current) return;
+        setMovies([]);
+      } finally {
+        if (searchId === latestSearchId.current) {
+          setIsLoading(false);
+        }
+      }
     }, 500);
 
     return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
   const clearSearch = () => {
-    console.log("clearSearch");
     setSearchTerm("");
+    setSortValue("");
   };
 
-  const openModal = () => {
+  const openModal = (movie) => {
+    setSelectedMovie(movie)
     setModal(true);
-    console.log(modal, 'modal')
+
+  };
+
+  const closeModal = () => {
+    setSelectedMovie(null);
+    setModal(false);
   }
 
+  useEffect(() => {
+    if (!modal) return;
 
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [modal])
+
+  const getSortedMovies = (moviesToSort, currentSortValue) => {
+    const sortedMovies = [...moviesToSort];
+
+    if (currentSortValue === "NEW_TO_OLD") {
+      sortedMovies.sort((a, b) => {
+        const releasedA = new Date(a.Released).getTime() || 0;
+        const releasedB = new Date(b.Released).getTime() || 0;
+        return releasedB - releasedA;
+      });
+    } else if (currentSortValue === "OLD_TO_NEW") {
+      sortedMovies.sort((a, b) => {
+        const releasedA = new Date(a.Released).getTime() || 0;
+        const releasedB = new Date(b.Released).getTime() || 0;
+        return releasedA - releasedB;
+      });
+    } else if (currentSortValue === "RATING_HIGH_TO_LOW") {
+      sortedMovies.sort((a, b) => {
+        const ratingA = Number(a.imdbRating) || 0;
+        const ratingB = Number(b.imdbRating) || 0;
+        return ratingB - ratingA;
+      });
+    } else if (currentSortValue === "RATING_LOW_TO_HIGH") {
+      sortedMovies.sort((a, b) => {
+        const ratingA = Number(a.imdbRating) || 0;
+        const ratingB = Number(b.imdbRating) || 0;
+        return ratingA - ratingB;
+      })
+    }
+
+    return sortedMovies;
+  };
+
+  const sortedMovies = getSortedMovies(movies, sortValue);
 
   return (
     <>
@@ -55,29 +148,19 @@ const Movies = () => {
         onSearchChange={onSearchChange}
         searchTerm={searchTerm}
         clearSearch={clearSearch}
+        sortValue={sortValue}
+        onSortChange={(event) => setSortValue(event.target.value)}
       />
       <section id="movie-grid">
-        {movies.map((movie) => (
-          <div key={movie.imdbID} className="movie-card" onClick={openModal}>
-            <div className="movie-card__media">
-              <figure>
-                <img 
-                  src={movie.Poster}  
-                  alt=""
-                  onError={(event) => {
-                    event.currentTarget.onerror = null;
-                    event.currentTarget.src = fallbackPoster
-                  }}
-                  />
-              </figure>
-            </div>
-            <div className="movie-card__details">
-              <h3>{movie.Title}</h3>
-              <p>Released: {movie.Year}</p>
-            </div>
-          </div>
+        {sortedMovies.map((movie) => (
+          <MovieCard
+            key={movie.imdbID}
+            movie={movie}
+            openModal={openModal}
+            fallbackPoster={fallbackPoster}
+          />
         ))}
-        {!searchTerm ? (
+        {!searchTerm.trim() ? (
           <div className="movie-grid-message-container">
             <p className="movie-grid-message">
               <span className="movie-grid__message-icon" aria-hidden="true">
@@ -88,7 +171,11 @@ const Movies = () => {
           </div>
         ) : isLoading ? (
           <div className="movie-grid-message-container">
-            <div className="movie-grid-loading" aria-live="polite" aria-label="Loading movies">
+            <div
+              className="movie-grid-loading"
+              aria-live="polite"
+              aria-label="Loading movies"
+            >
               <span className="movie-grid-spinner" aria-hidden="true" />
               <p className="movie-grid-message">Loading movies...</p>
             </div>
@@ -104,7 +191,12 @@ const Movies = () => {
           </div>
         ) : null}
       </section>
-      {modal ? <div>hello this will be the modal</div> : <div>Not showing the modal</div>}
+      <Modal
+        modal={modal}
+        selectedMovie={selectedMovie}
+        fallbackPoster={fallbackPoster}
+        closeModal={closeModal}
+      />
     </>
   );
 };

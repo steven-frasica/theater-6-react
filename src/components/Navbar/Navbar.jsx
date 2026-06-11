@@ -1,18 +1,34 @@
 import React from "react";
-import './Navbar.css'
+import "./Navbar.css";
 
-const Navbar = ({ searchTerm, onSearchChange, clearSearch }) => {
+const Navbar = ({
+  searchTerm,
+  onSearchChange,
+  clearSearch,
+  sortValue,
+  onSortChange,
+}) => {
   return (
     <div className="nav">
       <h1>Theater6</h1>
       <h2>Search for your next viewing experience</h2>
       <div className="nav__controls">
         <div className="search-bar">
-          <input id="search-input" value={searchTerm} type="text" onChange={onSearchChange} placeholder="Type to Search"/>
-          <button className="search-bar__clear" onClick={clearSearch}>&times;</button>
+          <input
+            id="search-input"
+            value={searchTerm}
+            type="text"
+            onChange={onSearchChange}
+            placeholder="Type to Search"
+          />
+          <button className="search-bar__clear" onClick={clearSearch}>
+            &times;
+          </button>
         </div>
-        <select name="sort" id="sort-select" className="sort-select">
-          <option value="" disabled defaultValue>Sort</option>
+        <select name="sort" id="sort-select" className="sort-select" value={sortValue} onChange={onSortChange}>
+          <option value="" disabled>
+            Sort
+          </option>
           <option value="NEW_TO_OLD">Newest First</option>
           <option value="OLD_TO_NEW">Oldest First</option>
           <option value="RATING_HIGH_TO_LOW">Rating, High to Low</option>

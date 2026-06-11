@@ -27,10 +27,6 @@
   font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.01em;
-  background: none;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: initial;
   text-align: center;
 }
 
@@ -72,12 +68,9 @@
   box-shadow: 0 0 0 1px rgba(6, 18, 36, 0.35) inset;
 }
 
-/* Relative positioning creates the containing block for the info overlay. */
-/* Because the info panel is absolutely positioned, it anchors to this card. */
 .movie-card {
   position: relative;
   align-self: start;
-  /* overflow: hidden; */
   border-radius: 12px;
   padding: 4px;
 }
@@ -101,7 +94,6 @@ figure {
   display: grid;
   cursor: pointer;
   place-items: center;
-  border-radius: 12px;
 }
 
 img {
@@ -131,7 +123,7 @@ img {
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0px 11px 0px 11px;
+  padding: 0 11px;
   border-radius: 10px;
   color: #f4f8ff;
   border: 1px solid #7ee8ff47;
@@ -142,4 +134,99 @@ img {
     opacity 0.2s ease,
     transform 0.4s ease;
   cursor: pointer;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: #000814b8;
+  z-index: 1000;
+}
+
+.modal__dialog {
+  width: min(980px, 100%);
+  max-height: 80vh;
+  overflow: auto;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #7ee8ff47;
+  background: linear-gradient(180deg, #0a1a30f5, #142b46ed);
+  color: #fff;
+}
+
+.modal__close {
+  float: right;
+  position: relative;
+  top: -6px;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 1.6rem;
+  cursor: pointer;
+}
+
+.modal__content {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.modal__poster {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #7ee8ff47;
+}
+
+.modal__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal__body h3 {
+  margin: 0;
+}
+
+.modal__meta,
+.modal__cast {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal__meta div,
+.modal__runtime,
+.modal__cast div,
+.modal__plot p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.modal__plot p {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.modal__plot b {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .modal__content {
+    grid-template-columns: 1fr;
+  }
+
+  .modal__poster {
+    max-width: 260px;
+    justify-self: center;
+  }
 }
