@@ -1,3 +1,4 @@
+/* Results grid expands and collapses based on available width. */
 #movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -9,6 +10,7 @@
   gap: 4px;
 }
 
+/* Shared container for empty, loading, and no-results states. */
 .movie-grid-message-container {
   display: flex;
   justify-content: center;
@@ -19,6 +21,7 @@
   box-shadow: 0 10px 26px rgba(0, 6, 18, 0.35);
 }
 
+/* Message text doubles as copy for both neutral and loading-adjacent states. */
 .movie-grid-message {
   display: inline-flex;
   align-items: center;
@@ -30,12 +33,14 @@
   text-align: center;
 }
 
+/* Spinner row is only used while Movies.jsx is fetching data. */
 .movie-grid-loading {
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
+/* Simple border spinner keeps loading visuals consistent with the app palette. */
 .movie-grid-spinner {
   width: 22px;
   height: 22px;
@@ -51,6 +56,7 @@
   }
 }
 
+/* Small info badge used in the empty and no-results states. */
 .movie-grid__message-icon {
   width: 20px;
   height: 20px;

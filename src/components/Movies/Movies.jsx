@@ -5,6 +5,7 @@ import Navbar from "../Navbar/Navbar";
 import MovieCard from "../MovieCard/MovieCard";
 import { useSearchParams } from "react-router-dom";
 
+// Results page: owns query state, fetch lifecycle, and client-side sorting.
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +25,7 @@ const Movies = () => {
   }
 
   useEffect(() => {
+    // Keep the URL query parameter in sync so refresh/share/back-forward preserve search state.
     const trimmedSearch = searchTerm.trim();
     const currentSearchParam = searchParams.get("search") || "";
   
@@ -41,6 +43,7 @@ const Movies = () => {
   }, [searchTerm, searchParams, setSearchParams])
 
   useEffect(() => {
+    // latestSearchId guards against stale async responses overwriting newer searches.
     const trimmedQuery = searchTerm.trim();
     const searchId = ++latestSearchId.current;
 
@@ -54,6 +57,7 @@ const Movies = () => {
 
     const timeoutId = setTimeout(async () => {
       try {
+        // First request gets the lightweight search list.
         const { data } = await axios.get(
           `http://www.omdbapi.com/?s=${trimmedQuery}&apikey=92fb2c25`,
         );
@@ -62,6 +66,7 @@ const Movies = () => {
 
         const searchResults = data.Search ? data.Search.slice(0, 6) : [];
 
+        // Follow-up requests hydrate each card with richer details used in the UI.
         const detailedMovies = await Promise.all(
           searchResults.map(async (movie) => {
             try {
@@ -96,6 +101,7 @@ const Movies = () => {
     setSortValue("");
   };
 
+  // Sorting happens locally because the page already holds the enriched result set in memory.
   const getSortedMovies = (moviesToSort, currentSortValue) => {
     const sortedMovies = [...moviesToSort];
 
@@ -140,6 +146,7 @@ const Movies = () => {
         onSortChange={(event) => setSortValue(event.target.value)}
       />
       <section id="movie-grid">
+        {/* Cards receive the live searchTerm so they can preserve the return route into details. */}
         {sortedMovies.map((movie) => (
           <MovieCard
             key={movie.imdbID}
@@ -149,6 +156,7 @@ const Movies = () => {
           />
         ))}
         {!searchTerm.trim() ? (
+          // Default empty state before the user has searched for anything.
           <div className="movie-grid-message-container">
             <p className="movie-grid-message">
               <span className="movie-grid__message-icon" aria-hidden="true">
@@ -158,6 +166,7 @@ const Movies = () => {
             </p>
           </div>
         ) : isLoading ? (
+          // Loading state replaces cards while the current search request is in flight.
           <div className="movie-grid-message-container">
             <div
               className="movie-grid-loading"
@@ -169,6 +178,7 @@ const Movies = () => {
             </div>
           </div>
         ) : movies.length === 0 ? (
+          // Query ran successfully but returned no usable matches.
           <div className="movie-grid-message-container">
             <p className="movie-grid-message">
               <span className="movie-grid__message-icon" aria-hidden="true">

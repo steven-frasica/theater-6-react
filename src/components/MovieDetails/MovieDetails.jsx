@@ -3,8 +3,10 @@ import axios from "axios";
 import { Link, useLocation, useParams } from "react-router-dom";
 import "./MovieDetails.css";
 
+// Detail page fetches a single movie by imdbID so refresh and direct links still work.
 const MovieDetails = () => {
   const { imdbID } = useParams();
+  // MovieCard passes this in route state so the back link returns to the same results query.
   const location = useLocation();
   const backTo = location.state?.backTo || "/movie-results";
   const [movie, setMovie] = useState(null);
@@ -17,6 +19,7 @@ const MovieDetails = () => {
   };
 
   useEffect(() => {
+    // Mounted flag prevents state updates if the user leaves before the request completes.
     let isMounted = true;
 
     const fetchMovie = async () => {
@@ -24,6 +27,7 @@ const MovieDetails = () => {
       setHasError(false);
 
       try {
+        // This route fetches by imdbID instead of relying on result-page memory.
         const { data } = await axios.get(
           `http://www.omdbapi.com/?i=${imdbID}&apikey=92fb2c25`,
         );
@@ -58,11 +62,13 @@ const MovieDetails = () => {
   return (
     <main className="movie-details-page">
       <section className="movie-details">
+        {/* Falls back to plain /movie-results when the page is opened directly. */}
         <Link className="movie-details__back" to={backTo}>
         ← Back to results
         </Link>
         <h1 className="movie-details__brand">Theater6</h1>
         {isLoading ? (
+          // Loading state mirrors the results page language but is scoped to one movie fetch.
           <div className="movie-details__status movie-details__status--loading">
             <div
               className="movie-details__loading"
@@ -74,6 +80,7 @@ const MovieDetails = () => {
             </div>
           </div>
         ) : hasError || !movie ? (
+          // Error and missing-data states share one branch because both produce no usable movie record.
           <div className="movie-details__status">
             <h1 className="movie-details__title">Movie not found</h1>
             <p className="movie-details__subtitle">
@@ -99,6 +106,7 @@ const MovieDetails = () => {
                   }}
                 />
                 <div className="movie-details__body">
+                  {/* Plot is intentionally promoted above the metadata grid as the main long-form content. */}
                   <h1 className="movie-details__title">
                     {formatMovieValue(movie.Title, "Untitled")}
                   </h1>

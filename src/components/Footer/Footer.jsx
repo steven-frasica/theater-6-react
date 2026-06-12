@@ -1,5 +1,6 @@
 import "./Footer.css";
 
+// Global footer rendered once from App so it appears below every route.
 const Footer = () => {
   return (
     <footer className="footer">
@@ -13,6 +14,7 @@ const Footer = () => {
           <div className="footer__copyright">
             Copyright © 2026 Theater6 Steven Frasica
           </div>
+          {/* Attribution stays in the footer because the movie icon asset comes from Flaticon. */}
           <a
             className="footer__attribution"
             href="https://www.flaticon.com/free-icons/movie"

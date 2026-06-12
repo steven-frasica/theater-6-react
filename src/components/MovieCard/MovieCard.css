@@ -1,3 +1,4 @@
+/* Card wrapper establishes the containing block for the hover details overlay. */
 .movie-card {
   position: relative;
   align-self: start;
@@ -5,6 +6,7 @@
   border-radius: 12px;
 }
 
+/* Figure/media share the same clipping shape so poster edges stay consistent. */
 .movie-card__figure,
 .movie-card__media {
   margin: 0;
@@ -17,6 +19,7 @@
   height: 100%;
 }
 
+/* Fixed poster ratio keeps the grid stable even with mixed source image sizes. */
 .movie-card__media {
   width: 100%;
   min-height: 0;
@@ -26,6 +29,7 @@
   cursor: pointer;
 }
 
+/* Slight zoom on hover adds motion without moving the grid layout itself. */
 .movie-card__image {
   display: block;
   width: 100%;
@@ -44,6 +48,7 @@
   transform: translateY(0);
 }
 
+/* Hidden details panel fades in on hover instead of occupying permanent card space. */
 .movie-card__details {
   position: absolute;
   left: 8px;

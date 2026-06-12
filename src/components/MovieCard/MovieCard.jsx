@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import "./MovieCard.css";
 
+// Presentational card plus navigation bridge from results into a movie detail route.
 const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
   const navigate = useNavigate();
 
@@ -8,6 +9,7 @@ const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
     return value && value !== "N/A" ? value : fallback;
   };
 
+  // Pass the current results URL along so MovieDetails can link back to the same search state.
   const trimmedSearch = searchTerm.trim();
   const backTo = trimmedSearch
     ? `/movie-results?search=${encodeURIComponent(trimmedSearch)}`
@@ -16,6 +18,7 @@ const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
   return (
     <div
       className="movie-card"
+      // Route state preserves search context without needing a global store.
       onClick={() =>
         navigate(`/movie/${movie.imdbID}`, {
           state: { backTo },

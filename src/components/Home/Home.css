@@ -1,3 +1,4 @@
+/* Full-screen hero shell for the landing page. */
 .home {
   min-height: 100vh;
   display: grid;
@@ -11,12 +12,14 @@
   color: #f4f8ff;
 }
 
+/* Centers the stacked headline, search form, and decorative image as one unit. */
 .home__hero {
   width: min(720px, 100%);
   text-align: center;
   transform: translateY(-28px);
 }
 
+/* Shared Theater6 brand treatment used to visually tie pages together. */
 .home__brand {
   margin: 0 0 16px;
   letter-spacing: 0.1em;
@@ -35,6 +38,7 @@
   text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 }
 
+/* Small label that introduces the search controls below the main headline. */
 .home__eyebrow {
   margin: 0 0 18px;
   color: #7ee8ff;
@@ -44,6 +48,7 @@
   text-transform: uppercase;
 }
 
+/* Primary message for the landing page. */
 .home__title {
   margin: 0 0 32px;
   font-size: clamp(1.2rem, 2vw, 3rem);
@@ -57,6 +62,7 @@
   line-height: 1.6;
 }
 
+/* Search input and submit button are laid out as a single control row on desktop. */
 .home__search {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -64,6 +70,7 @@
   width: 100%;
 }
 
+/* Decorative image under the search form; it adds theme without affecting behavior. */
 .home__movie-image {
   width: min(600px, 78%);
   margin-top: 28px;
@@ -73,6 +80,7 @@
   filter: drop-shadow(0 16px 28px rgba(0, 8, 20, 0.3))
 }
 
+/* Input is visually blended into the page while still acting as the primary action field. */
 .home__input {
   width: 100%;
   padding: 16px 18px;
@@ -83,6 +91,7 @@
   font-size: 1.2rem;
 }
 
+/* Button carries the only explicit action on Home: move into the results route. */
 .home__button {
   width: 60px;
   height: 60px;
@@ -91,8 +100,8 @@
   justify-content: center;
   border: none;
   border-radius: 999px;
-  background: #2a8db5;
-  color: #f4f8ff;
+  background: #4aa9cb;
+  color: #041a37;
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
@@ -101,18 +110,26 @@
 
 .home__button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(42, 141, 181, 0.32);
+  box-shadow: 0 10px 24px rgba(74, 169, 203, 0.34);
 }
 
 .home__button:active {
   transform: translateY(0);
 }
 
+/* Inline SVG uses currentColor so the icon can be themed from the button itself. */
 .home__button-icon {
-  line-height: 1;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 @media (max-width: 640px) {
+  /* Relax the upward offset and stack controls on smaller screens. */
   .home__hero {
     transform: translateY(-10px);
   }

@@ -2,10 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './Home.css';
 
+// Landing page that collects the initial search term and routes into results.
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
+  // The results page reads the query from the URL, so Home writes it there.
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -23,14 +25,21 @@ const Home = () => {
         <h1 className="home__brand">Theater6</h1>
         <h1 className="home__title">Find your next viewing experience</h1>
         <p className="home__eyebrow">Movie Search</p>
+        {/* Controlled form keeps the input state in sync before routing to results. */}
         <form onSubmit={handleSubmit} className="home__search">
           <input type="text" className="home__input" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} placeholder="Search for a movie"/>
           <button className="home__button" type="submit" aria-label="Search movies">
-  <span className="home__button-icon" aria-hidden="true">
-    🔍
-  </span>
-</button>
+            <svg
+              className="home__button-icon"
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="6.5" />
+              <line x1="15.5" y1="15.5" x2="20" y2="20" />
+            </svg>
+          </button>
         </form>
+        {/* Decorative asset served from /public so it can be referenced by root-relative path. */}
         <img 
           className="home__movie-image"
           src="/movie.svg" 
