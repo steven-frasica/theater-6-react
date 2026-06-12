@@ -134,15 +134,15 @@ const MovieDetails = () => {
                       </span>
                     </div>
                     <div className="movie-details__info-card">
-                      <span className="movie-details__info-label">IMDb Rating</span>
-                      <span className="movie-details__info-value">
-                        {formatMovieValue(movie.imdbRating, "N/A")}
-                      </span>
-                    </div>
-                    <div className="movie-details__info-card">
                       <span className="movie-details__info-label">Runtime</span>
                       <span className="movie-details__info-value">
                         {formatMovieValue(movie.Runtime)}
+                      </span>
+                    </div>
+                    <div className="movie-details__info-card">
+                      <span className="movie-details__info-label">IMDb Rating</span>
+                      <span className="movie-details__info-value">
+                        {formatMovieValue(movie.imdbRating, "N/A")}
                       </span>
                     </div>
                   </div>
