@@ -7,6 +7,7 @@ const Footer = () => {
       <div className="footer__inner">
         <div className="footer__stack">
           <div>
+            {/* Decorative logo reinforces branding but is hidden from assistive tech. */}
             <figure className="footer__logo" aria-hidden="true">
               <img className="footer__img" src="/movie.png" alt="" />
             </figure>

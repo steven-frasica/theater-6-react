@@ -16,6 +16,7 @@ const Navbar = ({
       <Link className="nav__home-link" to="/">
       ← Back to Home
       </Link>
+      {/* Headings are static here because the results page behavior is driven by the controls below. */}
       <h1>Theater6</h1>
       <h2>Search for your next viewing experience</h2>
       <div className="nav__controls">
@@ -34,6 +35,7 @@ const Navbar = ({
           </button>
         </div>
         {/* Sort only reorders already-fetched movies; it does not trigger a new API request. */}
+        {/* Disabled placeholder avoids implying a default sort order before the user chooses one. */}
         <select name="sort" id="sort-select" className="sort-select" value={sortValue} onChange={onSortChange}>
           <option value="" disabled>
             Sort

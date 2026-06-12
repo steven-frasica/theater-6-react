@@ -7,10 +7,13 @@ import { useSearchParams } from "react-router-dom";
 
 // Results page: owns query state, fetch lifecycle, and client-side sorting.
 const Movies = () => {
+  // The page stores enriched movie objects after the OMDb detail requests complete.
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  // Seed the input from the URL so refresh and shared links reopen the same search.
   const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
   const [isLoading, setIsLoading] = useState(false);
+  // Each request cycle gets a numeric id so older responses can be ignored safely.
   const latestSearchId = useRef(0);
   const fallbackPoster = "/fallback-poster.png";
   const [sortValue, setSortValue] = useState("");
@@ -19,6 +22,7 @@ const Movies = () => {
     const nextValue = event.target.value;
     setSearchTerm(nextValue);
 
+    // Clearing the query also clears sorting so the page resets to its default empty state.
     if (!nextValue.trim()) {
       setSortValue("");
     }
@@ -32,12 +36,14 @@ const Movies = () => {
 
     if (!trimmedSearch) {
       if (currentSearchParam) {
+        // Remove the query parameter entirely when the input is blank.
         setSearchParams({})
       }
       return;
     }
 
     if (trimmedSearch !== currentSearchParam) {
+      // Only write when the value actually changed to avoid useless history churn.
       setSearchParams({ search: trimmedSearch})
     }
   }, [searchTerm, searchParams, setSearchParams])
@@ -48,6 +54,7 @@ const Movies = () => {
     const searchId = ++latestSearchId.current;
 
     if (!trimmedQuery) {
+      // Blank searches should immediately clear results instead of showing stale cards.
       setMovies([]);
       setIsLoading(false);
       return;
@@ -55,6 +62,7 @@ const Movies = () => {
 
     setIsLoading(true);
 
+    // Short debounce keeps the app from firing an API request on every single keystroke.
     const timeoutId = setTimeout(async () => {
       try {
         // First request gets the lightweight search list.
@@ -65,6 +73,7 @@ const Movies = () => {
         if (searchId !== latestSearchId.current) return;
 
         const searchResults = data.Search ? data.Search.slice(0, 6) : [];
+        // The UI intentionally caps the grid to a small curated set of results.
 
         // Follow-up requests hydrate each card with richer details used in the UI.
         const detailedMovies = await Promise.all(
@@ -75,6 +84,7 @@ const Movies = () => {
               );
               return data.Response === "False" ? movie : data;
             } catch (error) {
+              // If one detail lookup fails, keep the base search result instead of failing the whole page.
               return movie;
             }
           }),
@@ -85,6 +95,7 @@ const Movies = () => {
         setMovies(detailedMovies);
       } catch (error) {
         if (searchId !== latestSearchId.current) return;
+        // Network or API errors collapse into the same no-results state for this UI.
         setMovies([]);
       } finally {
         if (searchId === latestSearchId.current) {
@@ -93,20 +104,24 @@ const Movies = () => {
       }
     }, 500);
 
+    // Cleanup cancels the pending debounce whenever the user keeps typing.
     return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
   const clearSearch = () => {
+    // Navbar uses this to restore the page to the same state as a fresh visit.
     setSearchTerm("");
     setSortValue("");
   };
 
   // Sorting happens locally because the page already holds the enriched result set in memory.
   const getSortedMovies = (moviesToSort, currentSortValue) => {
+    // Copy first so sorting does not mutate React state directly.
     const sortedMovies = [...moviesToSort];
 
     if (currentSortValue === "NEW_TO_OLD") {
       sortedMovies.sort((a, b) => {
+        // Missing or invalid dates fall back to 0 so they naturally sink to one end.
         const releasedA = new Date(a.Released).getTime() || 0;
         const releasedB = new Date(b.Released).getTime() || 0;
         return releasedB - releasedA;
@@ -119,6 +134,7 @@ const Movies = () => {
       });
     } else if (currentSortValue === "RATING_HIGH_TO_LOW") {
       sortedMovies.sort((a, b) => {
+        // Ratings come back as strings from OMDb, so Number() normalizes them for numeric sorting.
         const ratingA = Number(a.imdbRating) || 0;
         const ratingB = Number(b.imdbRating) || 0;
         return ratingB - ratingA;
@@ -134,6 +150,7 @@ const Movies = () => {
     return sortedMovies;
   };
 
+  // Derive the visible list from raw results plus the active sort choice.
   const sortedMovies = getSortedMovies(movies, sortValue);
 
   return (
@@ -187,7 +204,7 @@ const Movies = () => {
               No results found, try searching again
             </p>
           </div>
-        ) : null}
+        ) : null}{/* When movies exist, the grid is fully occupied by MovieCard components above. */}
       </section>
     </>
   );

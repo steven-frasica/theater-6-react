@@ -9,11 +9,13 @@ const MovieDetails = () => {
   // MovieCard passes this in route state so the back link returns to the same results query.
   const location = useLocation();
   const backTo = location.state?.backTo || "/movie-results";
+  // One movie record drives the entire page once the fetch completes.
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const fallbackPoster = "/fallback-poster.png";
 
+  // Keeps the JSX readable by centralizing the common OMDb "N/A" fallback handling.
   const formatMovieValue = (value, fallback = "Unknown") => {
     return value && value !== "N/A" ? value : fallback;
   };
@@ -23,6 +25,7 @@ const MovieDetails = () => {
     let isMounted = true;
 
     const fetchMovie = async () => {
+      // Reset status first so navigating between movie ids shows fresh loading behavior.
       setIsLoading(true);
       setHasError(false);
 
@@ -35,6 +38,7 @@ const MovieDetails = () => {
         if (!isMounted) return;
 
         if (data.Response === "False") {
+          // OMDb can return a 200 response with an application-level failure message.
           setHasError(true);
           setMovie(null);
           return;
@@ -42,6 +46,7 @@ const MovieDetails = () => {
 
         setMovie(data);
       } catch (error) {
+        // Transport errors land here and share the same UI as an invalid movie id.
         if (!isMounted) return;
         setHasError(true);
         setMovie(null);
@@ -54,6 +59,7 @@ const MovieDetails = () => {
 
     fetchMovie();
 
+    // Cleanup flips the mounted guard before a later response can reach state setters.
     return () => {
       isMounted = false;
     };
@@ -89,18 +95,21 @@ const MovieDetails = () => {
           </div>
         ) : (
           <>
+            {/* Eyebrow label identifies the page section once the movie data is available. */}
             <p className="movie-details__eyebrow">Movie Details</p>
             <div className="movie-details__dialog">
               <div className="movie-details__content">
                 <img
                   className="movie-details__poster"
                   src={
+                    // Matches MovieCard behavior so posters degrade consistently across the app.
                     movie.Poster && movie.Poster !== "N/A"
                       ? movie.Poster
                       : fallbackPoster
                   }
                   alt={movie.Title}
                   onError={(event) => {
+                    // Swap to the bundled fallback once if the remote poster fails to load.
                     event.currentTarget.onerror = null;
                     event.currentTarget.src = fallbackPoster;
                   }}
@@ -112,11 +121,13 @@ const MovieDetails = () => {
                   </h1>
                   <div className="movie-details__plot movie-details__info-card--wide">
                     <p>
+                      {/* Bold label helps the long-form plot block scan like the smaller info cards below. */}
                       <b>Plot:</b>{" "}
                       {formatMovieValue(movie.Plot, "Plot unavailable.")}
                     </p>
                   </div>
                   <div className="movie-details__info-grid">
+                    {/* Wide cards are used for fields that routinely contain longer strings. */}
                     <div className="movie-details__info-card movie-details__info-card--wide">
                       <span className="movie-details__info-label">Director</span>
                       <span className="movie-details__info-value">

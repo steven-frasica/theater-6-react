@@ -5,6 +5,7 @@ import "./MovieCard.css";
 const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
   const navigate = useNavigate();
 
+  // OMDb often returns "N/A" strings, so the card normalizes those before display.
   const formatMovieValue = (value, fallback = "Unknown") => {
     return value && value !== "N/A" ? value : fallback;
   };
@@ -30,12 +31,14 @@ const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
           <img
             className="movie-card__image"
             src={
+              // Prefer the API poster, but fall back when OMDb omits it or returns N/A.
               movie.Poster && movie.Poster !== "N/A"
                 ? movie.Poster
                 : fallbackPoster
             }
             alt={movie.Title}
             onError={(event) => {
+              // Broken remote poster URLs are replaced once to avoid endless error loops.
               event.currentTarget.onerror = null;
               event.currentTarget.src = fallbackPoster;
             }}
@@ -43,6 +46,7 @@ const MovieCard = ({ movie, fallbackPoster, searchTerm }) => {
         </figure>
       </div>
       <div className="movie-card__details">
+        {/* The details panel mirrors the most useful scan fields from the full detail page. */}
         <h4>{formatMovieValue(movie.Title, "Untitled")}</h4>
         <p>Released: {formatMovieValue(movie.Released || movie.Year)}</p>
         <p>Genre: {formatMovieValue(movie.Genre)}</p>
