@@ -9,7 +9,7 @@
 
 //   // async function getMovies() {
 //   //   const { data } = await axios.get(
-//   //     `http://www.omdbapi.com/?s=fast&apikey=92fb2c25`,
+//   //     `https://www.omdbapi.com/?s=fast&apikey=${process.env.REACT_APP_OMDB_API_KEY}`,
 //   //   );
 //   //   setMovies(data.Search.slice(0, 6));
 //   // }
@@ -27,7 +27,7 @@
 //     const timeoutId = window.setTimeout(async () => {
 //       try {
 //         const { data } = await axios.get(
-//           `http://www.omdbapi.com/?s=${trimmedQuery}&apikey=92fb2c25`,
+//           `https://www.omdbapi.com/?s=${encodeURIComponent(trimmedQuery)}&apikey=${process.env.REACT_APP_OMDB_API_KEY}`,
 //         );
 
 //         if (!ignoreResponse) {

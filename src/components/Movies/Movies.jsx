@@ -7,6 +7,7 @@ import { useSearchParams } from "react-router-dom";
 
 // Results page: owns query state, fetch lifecycle, and client-side sorting.
 const Movies = () => {
+  const omdbApiKey = process.env.REACT_APP_OMDB_API_KEY;
   // The page stores enriched movie objects after the OMDb detail requests complete.
   const [movies, setMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,7 +68,7 @@ const Movies = () => {
       try {
         // First request gets the lightweight search list.
         const { data } = await axios.get(
-          `http://www.omdbapi.com/?s=${trimmedQuery}&apikey=92fb2c25`,
+          `https://www.omdbapi.com/?s=${encodeURIComponent(trimmedQuery)}&apikey=${omdbApiKey}`,
         );
 
         if (searchId !== latestSearchId.current) return;
@@ -80,7 +81,7 @@ const Movies = () => {
           searchResults.map(async (movie) => {
             try {
               const { data } = await axios.get(
-                `http://www.omdbapi.com/?i=${movie.imdbID}&apikey=92fb2c25`,
+                `https://www.omdbapi.com/?i=${movie.imdbID}&apikey=${omdbApiKey}`,
               );
               return data.Response === "False" ? movie : data;
             } catch (error) {
