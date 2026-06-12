@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = ({
@@ -10,6 +11,9 @@ const Navbar = ({
 }) => {
   return (
     <div className="nav">
+      <Link className="nav__home-link" to="/">
+      ← Back to Home
+      </Link>
       <h1>Theater6</h1>
       <h2>Search for your next viewing experience</h2>
       <div className="nav__controls">

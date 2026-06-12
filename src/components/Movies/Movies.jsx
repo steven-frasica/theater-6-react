@@ -2,21 +2,17 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Movies.css";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
-import MovieCard from "./MovieCard";
-import Modal from "../Modal/Modal";
+import MovieCard from "../MovieCard/MovieCard";
 import { useSearchParams } from "react-router-dom";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
-  // searchTerm in input
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState(searchParams.get("search") || "");
   const [isLoading, setIsLoading] = useState(false);
-  const [modal, setModal] = useState(false);
   const latestSearchId = useRef(0);
   const fallbackPoster = "/fallback-poster.png";
   const [sortValue, setSortValue] = useState("");
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
   function onSearchChange(event) {
     const nextValue = event.target.value;
@@ -100,33 +96,6 @@ const Movies = () => {
     setSortValue("");
   };
 
-  const openModal = (movie) => {
-    setSelectedMovie(movie)
-    setModal(true);
-
-  };
-
-  const closeModal = () => {
-    setSelectedMovie(null);
-    setModal(false);
-  }
-
-  useEffect(() => {
-    if (!modal) return;
-
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        closeModal();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [modal])
-
   const getSortedMovies = (moviesToSort, currentSortValue) => {
     const sortedMovies = [...moviesToSort];
 
@@ -175,8 +144,8 @@ const Movies = () => {
           <MovieCard
             key={movie.imdbID}
             movie={movie}
-            openModal={openModal}
             fallbackPoster={fallbackPoster}
+            searchTerm={searchTerm}
           />
         ))}
         {!searchTerm.trim() ? (
@@ -210,12 +179,6 @@ const Movies = () => {
           </div>
         ) : null}
       </section>
-      <Modal
-        modal={modal}
-        selectedMovie={selectedMovie}
-        fallbackPoster={fallbackPoster}
-        closeModal={closeModal}
-      />
     </>
   );
 };

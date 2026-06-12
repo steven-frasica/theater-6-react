@@ -3,6 +3,7 @@
   display: grid;
   place-items: center;
   padding: 32px 20px;
+  overflow: hidden;
   background:
     radial-gradient(850px 450px at 8% -10%, #0b417b 10%, transparent 60%),
     radial-gradient(850px 450px at 92% 0%, #1c65b5 0%, transparent 56%),
@@ -13,6 +14,25 @@
 .home__hero {
   width: min(720px, 100%);
   text-align: center;
+  transform: translateY(-28px);
+}
+
+.home__brand {
+  margin: 0 0 16px;
+  letter-spacing: 0.1em;
+  font-size: clamp(2.8rem, 6vw, 4rem);
+  color: #63f0dc;
+  background: linear-gradient(
+    120deg,
+    #7ee8ff 0%,
+    #63f0dc 40%,
+    #1de9b6 80%,
+    #00bfae 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.45);
 }
 
 .home__eyebrow {
@@ -26,7 +46,8 @@
 
 .home__title {
   margin: 0;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  margin-bottom: 24px;
+  font-size: clamp(1.2rem, 2vw, 3rem);
 }
 
 .home__subtitle {
@@ -42,6 +63,15 @@
   grid-template-columns: 1fr auto;
   gap: 12px;
   width: 100%;
+}
+
+.home__movie-image {
+  width: min(600px, 78%);
+  margin-top: 28px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  filter: drop-shadow(0 16px 28px rgba(0, 8, 20, 0.3))
 }
 
 .home__input {
@@ -84,11 +114,20 @@
 }
 
 @media (max-width: 640px) {
+  .home__hero {
+    transform: translateY(-10px);
+  }
+
   .home__search {
     grid-template-columns: 1fr;
   }
 
   .home__button {
     justify-self: center;
+  }
+
+  .home__camera-image {
+    width: min(280px, 82%);
+    margin-top: 24px;
   }
 }
