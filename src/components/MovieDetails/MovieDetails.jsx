@@ -3,10 +3,11 @@ import axios from "axios";
 import { Link, useLocation, useParams } from "react-router-dom";
 import "./MovieDetails.css";
 
+const OMDB_API_KEY = process.env.REACT_APP_OMDB_API_KEY;
+
 // Detail page fetches a single movie by imdbID so refresh and direct links still work.
 const MovieDetails = () => {
   const { imdbID } = useParams();
-  const omdbApiKey = process.env.REACT_APP_OMDB_API_KEY;
   // MovieCard passes this in route state so the back link returns to the same results query.
   const location = useLocation();
   const backTo = location.state?.backTo || "/movie-results";
@@ -33,7 +34,7 @@ const MovieDetails = () => {
       try {
         // This route fetches by imdbID instead of relying on result-page memory.
         const { data } = await axios.get(
-          `https://www.omdbapi.com/?i=${imdbID}&apikey=${omdbApiKey}`,
+          `https://www.omdbapi.com/?i=${imdbID}&apikey=${OMDB_API_KEY}`,
         );
 
         if (!isMounted) return;
