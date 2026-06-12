@@ -72,7 +72,7 @@
 
 /* Decorative image under the search form; it adds theme without affecting behavior. */
 .home__movie-image {
-  width: min(600px, 78%);
+  width: min(720px, 100%);
   margin-top: 28px;
   display: block;
   margin-left: auto;
@@ -100,7 +100,12 @@
   justify-content: center;
   border: none;
   border-radius: 999px;
-  background: #4aa9cb;
+  background: linear-gradient(
+    120deg,
+    #56c7d8 0%,
+    #53c9c7 55%,
+    #4dbfb3 100%
+  );
   color: #041a37;
   font-size: 1.25rem;
   font-weight: 700;
@@ -110,7 +115,7 @@
 
 .home__button:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(74, 169, 203, 0.34);
+  box-shadow: 0 10px 24px rgba(77, 191, 179, 0.22);
 }
 
 .home__button:active {
@@ -142,7 +147,7 @@
     justify-self: center;
   }
 
-  .home__camera-image {
+  .home__movie-image {
     width: min(280px, 82%);
     margin-top: 24px;
   }
