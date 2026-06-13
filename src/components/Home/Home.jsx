@@ -26,7 +26,7 @@ const Home = () => {
     <main className="home">
       <section className="home__hero">
         <h1 className="home__brand">Theater6</h1>
-        <h1 className="home__title">Find your next viewing experience</h1>
+        <h2 className="home__title">Find your next viewing experience</h2>
         <p className="home__eyebrow">Movie Search</p>
         {/* Controlled form keeps the input state in sync before routing to results. */}
         <form onSubmit={handleSubmit} className="home__search">
