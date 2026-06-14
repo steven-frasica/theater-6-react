@@ -2,7 +2,7 @@
 
 Theater6 is a movie search app built with React, React Router, Axios, and the
 OMDb API. Users can search for movies, sort results by date or rating, open a
-dedicated details page for a selected title, and return to the same search they
+details page for a selected title, and return to the same search they
 came from.
 
 This project helped me practice working with routed React views, async API
@@ -26,7 +26,7 @@ requests, client-side sorting, defensive UI states, and reusable components.
 - React Router
 - Axios
 - JavaScript
-- CSS3
+- CSS
 - OMDb API
 
 ## How It Works
@@ -88,7 +88,6 @@ posters, text fields, and ratings to keep the UI stable.
 
 - `npm start`: run the app in development mode
 - `npm run build`: create a production build
-- `npm test`: run the test suite
 
 ## Future Improvements
 
