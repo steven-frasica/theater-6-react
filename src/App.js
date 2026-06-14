@@ -5,10 +5,11 @@ import Home from './components/Home/Home';
 import Footer from './components/Footer/Footer';
 import MovieDetails from './components/MovieDetails/MovieDetails';
 
+const routerBasename = process.env.NODE_ENV === 'production' ? '/theater-6-react' : '/';
 
 function App() {
   return (
-    <Router>
+    <Router basename={routerBasename}>
       <div className="App">
         <div className="app__content">
           <Routes>
