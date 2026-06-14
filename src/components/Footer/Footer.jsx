@@ -2,6 +2,8 @@ import "./Footer.css";
 
 // Global footer rendered once from App so it appears below every route.
 const Footer = () => {
+  const footerLogo = `${process.env.PUBLIC_URL}/movie.png`;
+
   return (
     <footer className="footer">
       <div className="footer__inner">
@@ -9,7 +11,7 @@ const Footer = () => {
           <div>
             {/* Decorative logo reinforces branding but is hidden from assistive tech. */}
             <figure className="footer__logo" aria-hidden="true">
-              <img className="footer__img" src="/movie.png" alt="" />
+              <img className="footer__img" src={footerLogo} alt="" />
             </figure>
           </div>
           <div className="footer__copyright">

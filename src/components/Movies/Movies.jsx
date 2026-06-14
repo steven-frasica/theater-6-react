@@ -17,7 +17,7 @@ const Movies = () => {
   const [isLoading, setIsLoading] = useState(false);
   // Each request cycle gets a numeric id so older responses can be ignored safely.
   const latestSearchId = useRef(0);
-  const fallbackPoster = "/fallback-poster.png";
+  const fallbackPoster = `${process.env.PUBLIC_URL}/fallback-poster.png`;
   const [sortValue, setSortValue] = useState("");
 
   function onSearchChange(event) {

@@ -7,6 +7,7 @@ const Home = () => {
   // Local input state only lives on Home long enough to build the results-page URL.
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const movieIllustration = `${process.env.PUBLIC_URL}/movie.svg`;
 
   // The results page reads the query from the URL, so Home writes it there.
   const handleSubmit = (event) => {
@@ -44,10 +45,10 @@ const Home = () => {
             </svg>
           </button>
         </form>
-        {/* Decorative asset served from /public so it can be referenced by root-relative path. */}
+        {/* Decorative asset is served from /public and resolved through PUBLIC_URL for GitHub Pages. */}
         <img 
           className="home__movie-image"
-          src="/movie.svg" 
+          src={movieIllustration}
           alt="movie night" />
       </section>
     </main>

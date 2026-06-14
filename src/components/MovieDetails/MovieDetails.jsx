@@ -15,7 +15,7 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
-  const fallbackPoster = "/fallback-poster.png";
+  const fallbackPoster = `${process.env.PUBLIC_URL}/fallback-poster.png`;
 
   // Keeps the JSX readable by centralizing the common OMDb "N/A" fallback handling.
   const formatMovieValue = (value, fallback = "Unknown") => {
